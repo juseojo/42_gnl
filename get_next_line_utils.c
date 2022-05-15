@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:54 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/15 02:38:19 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/16 02:25:54 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ char	*ft_strdup(const char *s1)
 	cpy = malloc(len);
 	if (cpy == 0)
 		return (0);
-	ft_strlcpy(cpy, s1, len);
+	*cpy = 0;
+	ft_strlcat(cpy, s1, len);
 	return (cpy);
 }
 
@@ -45,28 +46,21 @@ size_t	ft_strlcat(char *dest, const char *src, size_t size)
 	return (src_len + dst_len);
 }
 
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+void	free_words(t_words *list)
 {
-	size_t	i;
-	size_t	j;
+	t_words	*temp;
 
-	i = 0;
-	j = 0;
-	while (src[j])
-		j++;
-	if (size < 2)
+	temp = list;
+	while (temp != NULL)
 	{
-		if (size == 1)
-			dest[i] = 0;
-		return (j);
+		list = list -> next;
+		if (temp -> word)
+			free(temp -> word);
+		if (temp)
+			free(temp);
+		temp = list;
 	}
-	while (src[i] && i < size - 1)
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = 0;
-	return (j);
+	free(list);
 }
 
 size_t	ft_strlen(const char *s)
@@ -81,18 +75,21 @@ size_t	ft_strlen(const char *s)
 	return (count);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+int	append(t_words *list, char *new_word)
 {
-	size_t	len;
-	char	*result;
+	t_words	*new_node;
+	t_words	*display;
 
-	if (!s1 || !s2)
-		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2) + 1;
-	result = (char *)malloc(len);
-	if (!result)
-		return (NULL);
-	ft_strlcpy(result, s1, ft_strlen(s1) + 1);
-	ft_strlcat(result, s2, len);
-	return (result);
+	display = list;
+	while (display -> next != NULL)
+		display = display -> next;
+	new_node = malloc(sizeof(t_words));
+	if (!new_node)
+		return (0);
+	new_node -> word = ft_strdup(new_word);
+	if (new_node -> word == 0)
+		return (0);
+	new_node -> next = NULL;
+	display -> next = new_node;
+	return (1);
 }

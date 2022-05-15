@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:15 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/16 01:10:56 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/16 03:58:39 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	read_chunk(int fd, char	**chunk)
 
 	i = 0;
 	if (*chunk != NULL)
+	{
 		free(*chunk);
+		*chunk = 0;
+	}
 	*chunk = (char *) malloc(sizeof(char) * BUFFER_SIZE + 1);
 	while (i <= BUFFER_SIZE)
 	{
@@ -55,46 +58,11 @@ char	*connect_words(t_words *list)
 	return (line);
 }
 
-void	free_words(t_words *list)
-{
-	t_words	*temp;
-
-	temp = list;
-	while (temp != NULL)
-	{
-		list = list -> next;
-		if (temp -> word)
-			free(temp -> word);
-		if (temp)
-			free(temp);
-		temp = list;
-	}
-	free(list);
-}
-
-int	append(t_words *list, char *new_word)
-{
-	t_words	*new_node;
-	t_words	*display;
-
-	display = list;
-	while (display -> next != NULL)
-		display = display -> next;
-	if (!(new_node = malloc(sizeof(t_words))))
-		return (0);
-	new_node -> word = ft_strdup(new_word);
-	if (new_node -> word == 0)
-		return (0);
-	new_node -> next = NULL;
-	display -> next = new_node;
-	return (1);
-}
-
 char	*return_value(t_words **list, char **chunk, int fin)
 {
 	char	*line;
-	int	start;
-	int	j;
+	int		start;
+	int		j;
 
 	j = 0;
 	start = 0;
@@ -104,8 +72,8 @@ char	*return_value(t_words **list, char **chunk, int fin)
 			start = j + 1;
 		j++;
 	}
-	line = (char *)malloc(sizeof(char) * (fin - start + 1));
-	if (!(line))	
+	line = (char *) malloc(sizeof(char) * (fin - start + 1));
+	if (!line)
 		return (0);
 	*line = 0;
 	ft_strlcat(line, *chunk + start, fin - start + 1);
@@ -127,50 +95,53 @@ char	*return_value(t_words **list, char **chunk, int fin)
 	return (line);
 }
 
+char	*gnl_sub(int fd, t_gnl	*var, t_words **head)
+{
+	while (fd >= 0)
+	{
+		while (*(var -> chunk + var -> i))
+		{
+			if (*(var -> chunk + var -> i) == '\n')
+			{
+				var -> ln = ++(var -> i);
+				return (return_value(head, &var -> chunk, var -> i));
+			}
+			(var -> i)++;
+		}
+		if (var -> i == BUFFER_SIZE)
+		{
+			if (var -> ln > 0)
+				append(*head, var -> chunk + var -> ln);
+			else
+				append(*head, var -> chunk);
+			read_chunk(fd, &var -> chunk);
+		}
+		else
+			return (return_value(head, &var -> chunk, var -> i));
+		var -> i = 0;
+	}
+	free(*head);
+	return (0);
+}
+
 char	*get_next_line(int fd)
 {
-	static char	*chunk;
-	static int		i;
-	static int		ln;
-	t_words		*head;
+	static t_gnl		var;
+	t_words	*head;
 
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE < 1)
 		return (0);
 	head = malloc(sizeof(struct s_words));
 	head -> word = 0;
 	head -> next = 0;
 	if (!(head))
 		return (0);
-	if (chunk == NULL || *chunk == 0)
+	if (var.chunk == NULL)
 	{
-		i = 0;
-		chunk = 0;
-		ln = 0;
-		read_chunk(fd, &chunk);
+		var.i = 0;
+		var.chunk = 0;
+		var.ln = 0;
+		read_chunk(fd, &var.chunk);
 	}
-	while (fd >= 0)
-	{
-		while (*(chunk + i))
-		{
-			if (*(chunk + i) == '\n')
-			{
-				ln = ++i;
-				return (return_value(&head, &chunk, i));
-			}
-			i++;
-		}
-		if (i == BUFFER_SIZE)
-		{
-			if (ln > 0)
-				append(head, chunk + ln);
-			else
-				append(head, chunk);
-			read_chunk(fd, &chunk);
-		}
-		else
-			return (return_value(&head, &chunk, i));
-		i = 0;
-	}
-	free_words(head);
-	return (0);
+	return (gnl_sub(fd, &var, &head));
 }
