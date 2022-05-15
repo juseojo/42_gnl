@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seongjuncho <marvin@42.fr>                 +#+  +:+       +#+        */
+/*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/11 15:31:28 by seongjuncho       #+#    #+#             */
-/*   Updated: 2022/05/14 17:48:09 by seongjuncho      ###   ########.fr       */
+/*   Created: 2022/05/14 21:33:54 by seongjch          #+#    #+#             */
+/*   Updated: 2022/05/15 02:38:19 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
 
 char	*ft_strdup(const char *s1)
 {
@@ -82,32 +81,18 @@ size_t	ft_strlen(const char *s)
 	return (count);
 }
 
-int	append(t_words *list, char *new_word)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	t_words	*new_node;
+	size_t	len;
+	char	*result;
 
-	if (list -> next == NULL)
-	{
-		if (!(new_node = malloc(sizeof(t_words))))
-			return (0);
-		new_node -> word = ft_strdup(new_word);
-		if (new_node -> word == 0)
-			return (0);
-		new_node -> next = NULL;
-		list -> next = new_node;
-	}
-	else
-	{
-		t_words	*display = list;
-		while (display -> next != NULL)
-			display = display -> next;
-		if (!(new_node = malloc(sizeof(t_words))))
-			return (0);
-		new_node -> word = ft_strdup(new_word);
-		if (new_node -> word == 0)
-			return (0);
-		new_node -> next = NULL;
-		display -> next = new_node;
-	}
-	return (1);
+	if (!s1 || !s2)
+		return (NULL);
+	len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	result = (char *)malloc(len);
+	if (!result)
+		return (NULL);
+	ft_strlcpy(result, s1, ft_strlen(s1) + 1);
+	ft_strlcat(result, s2, len);
+	return (result);
 }
