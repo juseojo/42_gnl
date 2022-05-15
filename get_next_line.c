@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:15 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/15 18:31:56 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/16 01:10:56 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,10 @@ char	*return_value(t_words **list, char **chunk, int fin)
 	start = 0;
 	while (j < fin)
 	{
-		if (*(*chunk + j) == '\n')
+		if (*(*chunk + j) == '\n' && j + 1 != fin)
 			start = j + 1;
 		j++;
 	}
-	if (fin == start)
-		start = 0;
 	line = (char *)malloc(sizeof(char) * (fin - start + 1));
 	if (!(line))	
 		return (0);
@@ -147,6 +145,7 @@ char	*get_next_line(int fd)
 	{
 		i = 0;
 		chunk = 0;
+		ln = 0;
 		read_chunk(fd, &chunk);
 	}
 	while (fd >= 0)
@@ -162,7 +161,7 @@ char	*get_next_line(int fd)
 		}
 		if (i == BUFFER_SIZE)
 		{
-			if (ln > 1)
+			if (ln > 0)
 				append(head, chunk + ln);
 			else
 				append(head, chunk);
