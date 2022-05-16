@@ -6,32 +6,30 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:54 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/16 14:36:17 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/16 22:22:07 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(const char *s1, int size)
 {
 	char	*cpy;
 	int		len;
 
-	len = ft_strlen(s1) + 1;
+	len = size;
 	cpy = malloc(len);
 	*cpy = 0;
-	ft_strlcat(cpy, s1, len);
+	ft_strlcat(cpy, s1, len, len);
 	return (cpy);
 }
 
-size_t	ft_strlcat(char *dest, const char *src, size_t size)
+size_t	ft_strlcat(char *dest, const char *src, size_t size, size_t src_len)
 {
 	size_t	i;
-	size_t	src_len;
 	size_t	dst_len;
 
-	dst_len = ft_strlen(dest);
-	src_len = ft_strlen(src);
+	dst_len = size - src_len;
 	i = 0;
 	if (size <= dst_len)
 		return (src_len + size);
@@ -40,7 +38,7 @@ size_t	ft_strlcat(char *dest, const char *src, size_t size)
 		dest[dst_len + i] = src[i];
 		i++;
 	}
-	dest[dst_len + i] = 0;
+	dest[size - 1] = 0;
 	return (src_len + dst_len);
 }
 
@@ -73,7 +71,7 @@ size_t	ft_strlen(const char *s)
 	return (count);
 }
 
-int	append(t_words *list, char *new_word)
+int	append(t_words *list, char *new_word, int size)
 {
 	t_words	*new_node;
 	t_words	*display;
@@ -82,7 +80,7 @@ int	append(t_words *list, char *new_word)
 	while (display -> next != NULL)
 		display = display -> next;
 	new_node = malloc(sizeof(t_words));
-	new_node -> word = ft_strdup(new_word);
+	new_node -> word = ft_strdup(new_word, size);
 	if (new_node -> word == 0)
 		return (0);
 	new_node -> next = NULL;

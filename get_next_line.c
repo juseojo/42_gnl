@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:15 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/16 17:24:46 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/16 22:38:46 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,29 @@ int	read_chunk(int fd, char	**chunk)
 
 char	*connect_words(t_words *list)
 {
-	t_words	*display;
-	char	*line;
-	int		line_len;
+	t_words	*see;
+	t_cnw	var;
 
-	line_len = 0;
-	display = list -> next;
-	while (display != NULL)
+	var.len = 0;
+	see = list -> next;
+	while (see != NULL)
 	{
-		line_len += ft_strlen(display -> word);
-		display = display -> next;
+		var.len += BUFFER_SIZE;
+		if (see -> next == 0)
+			var.len += ft_strlen(see -> word) - BUFFER_SIZE;
+		see = see -> next;
 	}
-	line = (char *) malloc(sizeof(char) * line_len + 1);
-	*line = 0;
-	display = list -> next;
-	while (display != NULL)
+	var.line = (char *) malloc(++var.len);
+	see = list -> next;
+	while (see != NULL)
 	{
-		ft_strlcat(line, display -> word, line_len + 1);
-		display = display -> next;
+		if (see -> next != 0)
+			ft_strlcat(var.line, see -> word, var.len, BUFFER_SIZE + 1);
+		else
+			ft_strlcat(var.line, see->word, var.len, ft_strlen(see->word) + 1);
+		see = see -> next;
 	}
-	line[line_len] = 0;
-	return (line);
+	return (var.line);
 }
 
 char	*return_value(t_words **list, char **chunk, int start, int *fin)
@@ -61,9 +63,8 @@ char	*return_value(t_words **list, char **chunk, int start, int *fin)
 	t_rtn	var;
 
 	var.line = (char *)malloc(sizeof(char) * (*fin - start + 1));
-	*var.line = 0;
-	ft_strlcat(var.line, *chunk + start, *fin - start + 1);
-	append(*list, var.line);
+	ft_strlcat(var.line, *chunk + start, *fin - start + 1, *fin - start + 1);
+	append(*list, var.line, *fin - start + 1);
 	if (*(*chunk + *fin) == '\0')
 		*fin = 0;
 	free(var.line);
@@ -94,9 +95,9 @@ char	*gnl_sub(int fd, t_gnl	*var, t_words **head, int start)
 		if (var -> i == BUFFER_SIZE)
 		{
 			if (var -> ln > 0)
-				append(*head, var -> chunk + var -> ln);
+				append(*head, var -> chunk + var -> ln, var -> i);
 			else
-				append(*head, var -> chunk);
+				append(*head, var -> chunk, var -> i);
 			read_chunk(fd, &var -> chunk);
 		}
 		else

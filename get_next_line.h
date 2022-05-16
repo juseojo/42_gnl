@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:37 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/16 14:36:50 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/16 21:03:19 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,21 @@ typedef struct s_gnl {
 	int		ln;
 }	t_gnl;
 
+typedef struct s_cnw {
+	char	*line;
+	int		len;
+}	t_cnw;
+
 typedef struct s_rtn {
 	char	*line;
 	int		start;
-	int		j;
 }	t_rtn;
 
 void	free_words(t_words *list);
 char	*get_next_line(int fd);
-char	*ft_strdup(const char *s1);
-int		append(t_words *list, char *new_word);
-size_t	ft_strlcat(char *dest, const char *src, size_t size);
+char	*ft_strdup(const char *s1, int size);
+int		append(t_words *list, char *new_word, int size);
+size_t	ft_strlcat(char *dest, const char *src, size_t dst_len, size_t src_len);
 size_t	ft_strlen(const char *s);
 
 #endif
