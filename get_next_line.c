@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:15 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/16 14:47:23 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/16 17:24:46 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ char	*gnl_sub(int fd, t_gnl	*var, t_words **head, int start)
 		else
 			return (return_value(head, &var -> chunk, start, &var -> i));
 		var -> i = 0;
+		var -> ln = 0;
 	}
 }
 
