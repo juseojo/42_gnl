@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:37 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/16 21:03:19 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/17 05:29:59 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 typedef struct s_words {
 	struct s_words	*next;
+	int				len;
 	char			*word;
 }	t_words;
 
@@ -30,12 +31,8 @@ typedef struct s_gnl {
 typedef struct s_cnw {
 	char	*line;
 	int		len;
+	int		ex;
 }	t_cnw;
-
-typedef struct s_rtn {
-	char	*line;
-	int		start;
-}	t_rtn;
 
 void	free_words(t_words *list);
 char	*get_next_line(int fd);

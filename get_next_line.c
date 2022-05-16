@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:15 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/16 22:38:46 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/17 05:32:18 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,18 @@ char	*connect_words(t_words *list)
 	t_cnw	var;
 
 	var.len = 0;
+	var.ex = 0;
 	see = list -> next;
 	while (see != NULL)
 	{
-		var.len += BUFFER_SIZE;
-		if (see -> next == 0)
-			var.len += ft_strlen(see -> word) - BUFFER_SIZE;
+		var.len += see -> len;
 		see = see -> next;
 	}
 	var.line = (char *) malloc(++var.len);
 	see = list -> next;
 	while (see != NULL)
 	{
-		if (see -> next != 0)
-			ft_strlcat(var.line, see -> word, var.len, BUFFER_SIZE + 1);
-		else
-			ft_strlcat(var.line, see->word, var.len, ft_strlen(see->word) + 1);
+		var.ex = ft_strlcat(var.line, see -> word, var.len, var.ex);
 		see = see -> next;
 	}
 	return (var.line);
@@ -60,50 +56,50 @@ char	*connect_words(t_words *list)
 
 char	*return_value(t_words **list, char **chunk, int start, int *fin)
 {
-	t_rtn	var;
+	char	*line;
 
-	var.line = (char *)malloc(sizeof(char) * (*fin - start + 1));
-	ft_strlcat(var.line, *chunk + start, *fin - start + 1, *fin - start + 1);
-	append(*list, var.line, *fin - start + 1);
+	line = (char *)malloc(*fin - start + 1);
+	ft_strlcat(line, *chunk + start, *fin - start + 1, 0);
+	append(*list, line, *fin - start);
 	if (*(*chunk + *fin) == '\0')
 		*fin = 0;
-	free(var.line);
-	var.line = connect_words(*list);
+	free(line);
+	line = connect_words(*list);
 	free_words(*list);
-	if (*var.line == '\0')
+	if (*line == '\0')
 	{
-		free(var.line);
+		free(line);
 		return (NULL);
 	}
-	return (var.line);
+	return (line);
 }
 
 char	*gnl_sub(int fd, t_gnl	*var, t_words **head, int start)
 {
 	while (1)
 	{
-		start = var -> i;
-		while (*(var -> chunk + var -> i))
+		start = var->i;
+		while (*(var->chunk + var->i))
 		{
-			if (*(var -> chunk + var -> i) == '\n')
+			if (*(var->chunk + var->i) == '\n')
 			{
-				var -> ln = ++(var -> i);
-				return (return_value(head, &var -> chunk, start, &var -> i));
+				var -> ln = ++(var->i);
+				return (return_value(head, &var->chunk, start, &var->i));
 			}
 			(var -> i)++;
 		}
-		if (var -> i == BUFFER_SIZE)
+		if (var->i == BUFFER_SIZE)
 		{
-			if (var -> ln > 0)
-				append(*head, var -> chunk + var -> ln, var -> i);
+			if (var->ln > 0)
+				append(*head, var->chunk + var->ln, var->i - var->ln);
 			else
-				append(*head, var -> chunk, var -> i);
-			read_chunk(fd, &var -> chunk);
+				append(*head, var->chunk, var->i);
+			read_chunk(fd, &var->chunk);
 		}
 		else
-			return (return_value(head, &var -> chunk, start, &var -> i));
-		var -> i = 0;
-		var -> ln = 0;
+			return (return_value(head, &var->chunk, start, &var->i));
+		var->i = 0;
+		var->ln = 0;
 	}
 }
 
