@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:37 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/17 05:29:59 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/17 05:44:10 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,5 @@ char	*get_next_line(int fd);
 char	*ft_strdup(const char *s1, int size);
 int		append(t_words *list, char *new_word, int size);
 size_t	ft_strlcat(char *dest, const char *src, size_t dst_len, size_t src_len);
-size_t	ft_strlen(const char *s);
 
 #endif

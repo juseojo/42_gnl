@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:54 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/17 05:30:59 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/17 05:53:43 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*ft_strdup(const char *s1, int size)
 
 	len = size + 1;
 	cpy = malloc(len);
+	if (!cpy)
+		return (0);
 	*cpy = 0;
 	ft_strlcat(cpy, s1, len, 0);
 	return (cpy);
@@ -53,18 +55,6 @@ void	free_words(t_words *list)
 		temp = list;
 	}
 	free(list);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	count;
-
-	count = 0;
-	while (s[count])
-	{
-		count++;
-	}
-	return (count);
 }
 
 int	append(t_words *list, char *new_word, int size)

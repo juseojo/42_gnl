@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:15 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/17 05:32:18 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/17 05:57:04 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	read_chunk(int fd, char	**chunk)
 		*chunk = 0;
 	}
 	*chunk = (char *) malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!(*chunk))
+		return (0);
 	while (i <= BUFFER_SIZE)
 	{
 		*(*chunk + i) = 0;
@@ -45,6 +47,8 @@ char	*connect_words(t_words *list)
 		see = see -> next;
 	}
 	var.line = (char *) malloc(++var.len);
+	if (!var.line)
+		return (0);
 	see = list -> next;
 	while (see != NULL)
 	{
@@ -59,6 +63,8 @@ char	*return_value(t_words **list, char **chunk, int start, int *fin)
 	char	*line;
 
 	line = (char *)malloc(*fin - start + 1);
+	if (!line)
+		return (0);
 	ft_strlcat(line, *chunk + start, *fin - start + 1, 0);
 	append(*list, line, *fin - start);
 	if (*(*chunk + *fin) == '\0')
@@ -112,6 +118,8 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (0);
 	head = malloc(sizeof(struct s_words));
+	if (!head)
+		return (0);
 	head -> word = 0;
 	head -> next = 0;
 	if (var.chunk == NULL)
