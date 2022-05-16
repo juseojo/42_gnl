@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:15 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/16 06:49:18 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/16 14:47:23 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ char	*connect_words(t_words *list)
 		display = display -> next;
 	}
 	line = (char *) malloc(sizeof(char) * line_len + 1);
-	if (!(line))
-		return (0);
 	*line = 0;
 	display = list -> next;
 	while (display != NULL)
@@ -63,8 +61,6 @@ char	*return_value(t_words **list, char **chunk, int start, int *fin)
 	t_rtn	var;
 
 	var.line = (char *)malloc(sizeof(char) * (*fin - start + 1));
-	if (!(var.line))
-		return (0);
 	*var.line = 0;
 	ft_strlcat(var.line, *chunk + start, *fin - start + 1);
 	append(*list, var.line);
@@ -118,8 +114,6 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (0);
 	head = malloc(sizeof(struct s_words));
-	if (!(head))
-		return (0);
 	head -> word = 0;
 	head -> next = 0;
 	if (var.chunk == NULL)

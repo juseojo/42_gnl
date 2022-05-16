@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:54 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/16 02:25:54 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/16 14:36:17 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ char	*ft_strdup(const char *s1)
 
 	len = ft_strlen(s1) + 1;
 	cpy = malloc(len);
-	if (cpy == 0)
-		return (0);
 	*cpy = 0;
 	ft_strlcat(cpy, s1, len);
 	return (cpy);
@@ -84,8 +82,6 @@ int	append(t_words *list, char *new_word)
 	while (display -> next != NULL)
 		display = display -> next;
 	new_node = malloc(sizeof(t_words));
-	if (!new_node)
-		return (0);
 	new_node -> word = ft_strdup(new_word);
 	if (new_node -> word == 0)
 		return (0);
