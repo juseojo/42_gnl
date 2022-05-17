@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:54 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/17 06:05:31 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/17 18:30:45 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	append(t_words *list, char *new_word, int size)
 	if (!new_node)
 		return (0);
 	new_node -> word = ft_strdup(new_word, size);
-	new_node -> len = size;
 	if (new_node -> word == 0)
 		return (0);
 	new_node -> next = NULL;

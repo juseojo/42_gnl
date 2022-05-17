@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:37 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/17 05:44:10 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/17 18:15:24 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 typedef struct s_words {
 	struct s_words	*next;
-	int				len;
 	char			*word;
 }	t_words;
 
@@ -26,6 +25,7 @@ typedef struct s_gnl {
 	char	*chunk;
 	int		i;
 	int		ln;
+	int		total_len;
 }	t_gnl;
 
 typedef struct s_cnw {
