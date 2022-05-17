@@ -6,7 +6,7 @@
 /*   By: seongjch <seongjch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 21:33:15 by seongjch          #+#    #+#             */
-/*   Updated: 2022/05/17 18:56:16 by seongjch         ###   ########.fr       */
+/*   Updated: 2022/05/17 19:24:03 by seongjch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,15 @@ char	*return_value(t_words **list, t_gnl *var, int start)
 	int		fin;
 
 	fin = var->i;
+	if (var->i != var->ln)
+		var->ln = var->i;
 	line = (char *)malloc(fin - start + 1);
 	if (!line)
 		return (0);
 	ft_strlcat(line, var->chunk + start, fin - start + 1, 0);
 	append(*list, line, fin - start);
 	if (*(var->chunk + fin) == '\0')
-		var-> i = 0;
+		var -> i = 0;
 	free(line);
 	line = connect_words(*list, var->total_len);
 	var->total_len = 0;
@@ -84,14 +86,12 @@ char	*gnl_sub(int fd, t_gnl	*var, t_words **head, int start)
 		start = var->i;
 		while (*(var->chunk + var->i))
 		{
-			if (*(var->chunk + var->i) == '\n')
-			{
-				var -> ln = ++(var->i);
-				++(var->total_len);
-				return (return_value(head, var, start));
-			}
 			(var -> i)++;
 			(var -> total_len)++;
+			if (*(var->chunk + var->i - 1) == '\n')
+			{
+				return (return_value(head, var, start));
+			}
 		}
 		if (var->i == BUFFER_SIZE)
 		{
